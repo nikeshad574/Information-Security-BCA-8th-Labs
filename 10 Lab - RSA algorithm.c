@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include <string.h>
 
-// Function to compute (base^exp) % mod
 long long power(long long base, long long exp, long long mod) {
     long long res = 1;
     base %= mod;
@@ -13,34 +13,38 @@ long long power(long long base, long long exp, long long mod) {
 }
 
 int main() {
-    long long n;
-    long long e, d;
-    long long M, C;
-
-    printf("RSA Key Exchange and Operations\n");
-    printf("----------------------------------\n");
-    printf("Enter the public key modulus n: ");
+    long long n, e, d;
+    char msg[100];
+    
+    printf("Enter n: ");
     scanf("%lld", &n);
-    printf("Enter the public encryption exponent e: ");
+    printf("Enter e: ");
     scanf("%lld", &e);
-    printf("Enter the private decryption exponent d: ");
+    printf("Enter d: ");
     scanf("%lld", &d);
 
-    printf("\nPublic Key (e, n): (%lld, %lld)\n", e, n);
-    printf("Private Key (d, n): (%lld, %lld)\n", d, n);
+    printf("\nEnter message (text): ");
+    scanf("%s", msg);
 
-    printf("\nRSA Encryption\n");
-    printf("----------------------------------\n");
-    printf("Enter a numeric plaintext M: ");
-    scanf("%lld", &M);
-    
-    C = power(M, e, n);
-    printf("Ciphertext C = M^e mod n = %lld\n", C);
+    int len = strlen(msg);
+    long long encrypted[100];
+    char decrypted[100];
 
-    printf("\nRSA Decryption\n");
-    printf("----------------------------------\n");
-    M = power(C, d, n);
-    printf("Decrypted plaintext M = C^d mod n = %lld\n", M);
+    for (int i = 0; i < len; i++) {
+        encrypted[i] = power((long long)msg[i], e, n);
+    }
+
+    printf("\nEncrypted message: ");
+    for (int i = 0; i < len; i++) {
+        printf("%lld ", encrypted[i]);
+    }
+
+    for (int i = 0; i < len; i++) {
+        decrypted[i] = (char)power(encrypted[i], d, n);
+    }
+    decrypted[len] = '\0';
+
+    printf("\nDecrypted message: %s\n", decrypted);
 
     return 0;
 }
